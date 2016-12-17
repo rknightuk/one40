@@ -6,7 +6,7 @@ use App\Archive\LogRepository;
 use App\Tweet;
 use Illuminate\Console\Command;
 
-class One40Import extends Command
+class Import extends Command
 {
 	const DB_MAP = array(
 		"id_str"       => "tweetid",

@@ -13,8 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SetupOne40::class,
-        Commands\One40Import::class,
+        Commands\Setup::class,
+        Commands\Import::class,
+	    Commands\Fetch::class,
     ];
 
     /**

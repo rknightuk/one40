@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class SetupOne40 extends Command
+class Setup extends Command
 {
     /**
      * The name and signature of the console command.
