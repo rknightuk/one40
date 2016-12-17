@@ -29,6 +29,9 @@ class CreateTweetsTable extends Migration
             $table->text('place');
             $table->text('contributors');
         });
+
+        // Laravel migration doesn't support MEDIUMBLOB
+	    DB::statement('ALTER TABLE `tweets` MODIFY `extra` MEDIUMBLOB');
     }
 
     /**

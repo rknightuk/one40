@@ -6,6 +6,7 @@ one40.me
 2. Set `DB_DATABASE`
 3. Create database
 4. Run `php artisan one40:setup`
+php artisan vendor:publish
 
 
 - Authorisation/setup
