@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Archive\Importer;
 use App\Archive\LogRepository;
 use App\Tweet;
 use Illuminate\Console\Command;
@@ -35,19 +34,14 @@ class One40Import extends Command
      */
     protected $description = 'Import your Twitter archive';
 	/**
-	 * @var Importer
-	 */
-	private $importer;
-	/**
 	 * @var LogRepository
 	 */
 	private $logRepo;
 
-	public function __construct(LogRepository $logRepo, Importer $importer)
+	public function __construct(LogRepository $logRepo)
     {
         parent::__construct();
 	    $this->logRepo = $logRepo;
-	    $this->importer = $importer;
     }
 
     /**
