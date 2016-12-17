@@ -47,6 +47,8 @@ class SetupOne40 extends Command
 	    	$this->info('Error: User creation failed. Please try again');
 	    	return;
 	    }
+
+	    $this->info('Setup successfully completed!');
     }
 
 	private function setupDatabase()
