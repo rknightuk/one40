@@ -43,7 +43,7 @@ class SetupOne40 extends Command
     {
     	$this->setupDatabase();
 
-	    if ($user = $this->createUser()) {
+	    if (! $user = $this->createUser()) {
 	    	$this->info('Error: User creation failed. Please try again');
 	    	return;
 	    }
