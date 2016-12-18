@@ -73,6 +73,7 @@ class Fetch extends Command
 
 		if (! $user = User::first()) {
 			$this->error('No user found, run one40:setup');
+			return;
 		}
 
 		$screename = $user->username;
