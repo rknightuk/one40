@@ -3,7 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Formatter;
-use App\Tweet;
+use App\Tweets\Tweet;
+use App\Tweets\TweetRepository;
 use Illuminate\Console\Command;
 use Thujohn\Twitter\Facades\Twitter;
 
@@ -26,16 +27,22 @@ class Fetch extends Command
 	 * @var Formatter
 	 */
 	private $formatter;
+	/**
+	 * @var TweetRepository
+	 */
+	private $tweets;
 
 	/**
 	 * Create a new command instance.
 	 *
 	 * @param Formatter $formatter
+	 * @param TweetRepository $tweets
 	 */
-    public function __construct(Formatter $formatter)
+    public function __construct(Formatter $formatter, TweetRepository $tweets)
     {
         parent::__construct();
 	    $this->formatter = $formatter;
+	    $this->tweets = $tweets;
     }
 
     /**
@@ -52,16 +59,11 @@ class Fetch extends Command
 
 	private function importTweets()
 	{
-		$maxCount = 200;
 		$tweets   = [];
-		$sinceID  = 0;
+		$sinceID  = $this->tweets->getLatestId();
 		$maxID    = 0;
 
 		$screename = 'rmlewisuk';
-
-		$latestTweet = Tweet::orderBy('time', 'desc')->first();
-
-		if ($latestTweet) $sinceID = $latestTweet->tweetid;
 
 		$page = 1;
 
@@ -70,7 +72,7 @@ class Fetch extends Command
 				'screen_name'      => $screename,
 				'include_rts'      => true,
 				'include_entities' => true,
-				'count'            => $maxCount
+				'count'            => 200
 			];
 
 			if ($sinceID) {

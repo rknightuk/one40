@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Archive\LogRepository;
 use App\Formatter;
-use App\Tweet;
+use App\Tweets\Tweet;
 use Illuminate\Console\Command;
 
 class Import extends Command
