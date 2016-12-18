@@ -1,10 +1,8 @@
 <?php
 
-Auth::routes();
+use Illuminate\Support\Facades\App;
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Auth::routes();
 
 Route::get('/', 'TweetController@index');
 
@@ -29,3 +27,5 @@ Route::get('/search/{search?}', [
 	'as' => 'search',
 	'uses' => 'TweetController@searchResults'
 ]);
+
+App::bind(\App\Breadcrumbs\BreadcrumbInterface::class, \App\Breadcrumbs\CreitiveBreadcrumb::class);

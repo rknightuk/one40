@@ -76,7 +76,7 @@ class Fetch extends Command
 			return;
 		}
 
-		$screename = $user->username;
+		$screename = env('TWITTER_USERNAME');
 
 		$page = 1;
 

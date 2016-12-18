@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Archive\LogRepository;
 use App\Formatter;
-use App\Tweets\Tweet;
 use App\Tweets\TweetRepository;
 use Illuminate\Console\Command;
 

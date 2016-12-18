@@ -4,9 +4,14 @@ namespace App\Tweets;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Laracodes\Presenter\Traits\Presentable;
 
 class Tweet extends Model
 {
+	use Presentable;
+
+	protected $presenter = 'App\Tweets\TweetPresenter';
+
 	public $timestamps = false;
 
 	protected $table = 'tweets';

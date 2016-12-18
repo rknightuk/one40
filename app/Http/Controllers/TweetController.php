@@ -2,14 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Breadcrumbs\BreadcrumbInterface;
 use App\Tweets\TweetRepository;
 use Illuminate\Support\Facades\Input;
 
 class TweetController {
 
-	public function __construct(TweetRepository $tweets)
+	/**
+	 * @var BreadcrumbInterface
+	 */
+	private $breadcrumbs;
+
+	public function __construct(TweetRepository $tweets, BreadcrumbInterface $breadcrumbs)
 	{
 		$this->tweets = $tweets;
+		$this->breadcrumbs = $breadcrumbs;
+
+		$this->breadcrumbs->setCssClasses('breadcrumb');
+		$this->breadcrumbs->setDivider('');
+		$this->breadcrumbs->setListElement('ol');
+		$this->breadcrumbs->addCrumb('All Tweets', '/');
 	}
 
 	public function index()
@@ -26,10 +38,10 @@ class TweetController {
 
 	public function show($tweetId)
 	{
+		$this->breadcrumbs->addCrumb('Tweet ID: ' . $tweetId, $tweetId);
+
 		$tweets = $this->tweets->findById($tweetId);
 		$single = true;
-
-		dd(compact('tweets', 'single'));
 
 		return view('tweets.index', compact(
 			'tweets',
@@ -48,6 +60,10 @@ class TweetController {
 	{
 		$monthCounts = null;
 		$dayCounts = null;
+
+		$this->breadcrumbs->addCrumb($year, $year);
+		if ($month) $this->breadcrumbs->addCrumb(displayMonth($month), $month);
+		if ($day) $this->breadcrumbs->addCrumb(displayDate($day), $day);
 
 		$tweets = $this->tweets->getForDate($year, $month, $day);
 
@@ -77,6 +93,8 @@ class TweetController {
 	public function searchResults($search)
 	{
 		$tweets = $this->tweets->search($search);
+
+		$this->breadcrumbs->addCrumb($tweets->total() . ' found containing "' . $search . '"', 'search');
 
 		return view('tweets.index', compact(
 			'tweets',

@@ -1,0 +1,107 @@
+/**
+ * Bootstrap overrides
+ */
+.btn {
+	padding: 8px 14px;
+	font-size: 16px;
+}
+
+.form-group label {
+	text-transform: uppercase;
+	font-size: small;
+}
+
+.list-group {
+	font-size: 13px;
+}
+
+.well {
+    background-color: #dbedf8;
+}
+
+.breadcrumb {
+    background-color: #dbedf8;
+}
+
+/**
+ * Main
+ */
+body {
+	font-size: 1.7em;
+	font-family: 'Titillium Web', sans-serif;
+}
+
+h1 {
+	margin-bottom: 20px;
+}
+
+#app-wrapper {
+	margin-top: 75px;
+}
+
+.year-heading {
+	font-weight: bold;
+	font-size: 120%;
+}
+
+.month-item {
+	position: relative;
+	padding-left: 35px;
+	z-index: 1;
+}
+
+.tweet-percentage {
+	position: absolute;
+	background: #ea6c5f;
+	height: 2px;
+	bottom: 0;
+	left: 0;
+	z-index: -1;
+	-webkit-transition: width 0.5s ease-in-out;
+       -moz-transition: width 0.5s ease-in-out;
+        -ms-transition: width 0.5s ease-in-out;
+         -o-transition: width 0.5s ease-in-out;
+            transition: width 0.5s ease-in-out;
+}
+
+.list-group-item {
+	color: black!important;
+}
+
+.list-group-item:hover .tweet-percentage {
+	width: 100%!important;
+}
+
+.tweet-list {
+	list-style-type: none;
+	margin-left: -30px;
+}
+
+.tweet-list__tweet-body {
+	position: relative;
+	border-bottom: 1px solid #f5f5f5;
+	margin-bottom: 10px;
+	padding: 15px 0 35px 5px;
+}
+
+.tweet-list__tweet-body i {
+	color: #c5c5c5;
+}
+
+.tweet-list__meta {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	color: #c5c5c5;
+	font-size: small;
+	text-align: right;
+}
+
+.tweet-list__meta a {
+	color: #c5c5c5;
+}
+
+footer {
+	text-align: right;
+	margin-bottom: 20px;
+}

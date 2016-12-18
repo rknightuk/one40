@@ -27,7 +27,7 @@ class TweetRepository {
 	 */
 	public function findById($id)
 	{
-		return Tweet::where('tweetid', $id)->first();
+		return Tweet::where('tweetid', $id)->get();
 	}
 
 	/**

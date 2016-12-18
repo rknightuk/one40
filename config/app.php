@@ -164,6 +164,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
 	    Thujohn\Twitter\TwitterServiceProvider::class,
+	    Creitive\Breadcrumbs\BreadcrumbsServiceProvider::class,
+	    Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -229,6 +231,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
 	    'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
+	    'Breadcrumbs' => Creitive\Breadcrumbs\Facades\Breadcrumbs::class,
+	    'Form' => Collective\Html\FormFacade::class,
+	    'Html' => Collective\Html\HtmlFacade::class,
     ],
 
 ];
