@@ -13,9 +13,9 @@
 					<div class="feed-item">
 						@if ($log->count)
 							<div class="date">{!! $log->created_at !!}</div>
-							<div class="text">Imported {!! $log->count !!} tweets</div>
+							<div class="text">Imported {!! $log->count !!} @if ($log->count == 1) tweet @else tweets @endif</div>
 						@else
-							<div class="date">{!! $log->created_at !!} - No Tweets Found</div>
+							<div class="date">{!! $log->created_at !!} - No tweets found</div>
 						@endif
 					</div>
 				@empty
