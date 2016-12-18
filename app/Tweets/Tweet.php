@@ -32,7 +32,7 @@ class Tweet extends Model
 
 	public function getTimeAttribute($time)
 	{
-		return Carbon::createFromTimeStamp($time)->format('h:ia l jS F Y');
+		return Carbon::createFromTimeStamp($time);
 	}
 
 	public function getExtraAttribute($extra)
