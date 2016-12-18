@@ -13,7 +13,7 @@
 			<ul class="nav navbar-nav">
 			</ul>
 
-			@if (Auth::check())
+			@if (Auth::check() || ! env('PRIVATE'))
 			<form class="navbar-form navbar-right" action="/search" method="post" role="search">
 				<div class="form-group">
 					<input type="text" name="search" class="form-control" placeholder="Search">
