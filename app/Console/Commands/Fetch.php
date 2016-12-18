@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\FetchLog;
 use App\Formatter;
 use App\Tweets\Api;
 use App\Tweets\Tweet;
@@ -99,12 +100,14 @@ class Fetch extends Command
 			$page++;
 		} while (! empty($data));
 
-		if (! count($tweets)) {
+		$tweetCount = count($tweets);
+
+		if (! $tweetCount) {
 			$this->info('No new tweets found');
 			return;
 		}
 
-		$this->info(count($tweets) . ' new tweets found');
+		$this->info($tweetCount . ' new tweets found');
 
 		// Ascending sort, oldest first
 		$tweets = array_reverse($tweets);
@@ -114,5 +117,7 @@ class Fetch extends Command
 
 			$this->tweets->create($tweet);
 		}
+
+		FetchLog::create(['count' => $tweetCount]);
 	}
 }
