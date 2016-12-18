@@ -53,7 +53,6 @@ class Setup extends Command
 
 	private function setupDatabase()
 	{
-		Artisan::call('make:auth');
 		Artisan::call('migrate:install');
 		Artisan::call('migrate');
 	}
