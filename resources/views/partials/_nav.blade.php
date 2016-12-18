@@ -13,17 +13,19 @@
 			<ul class="nav navbar-nav">
 			</ul>
 
+			@if (Auth::check())
 			<form class="navbar-form navbar-right" action="/search" method="post" role="search">
 				<div class="form-group">
 					<input type="text" name="search" class="form-control" placeholder="Search">
 					{!! Form::token() !!}
 				</div>
 			</form>
+			@endif
 			<ul class="nav navbar-nav navbar-right">
 			    @if (Auth::check())
-			    	<li><a href="/auth/logout">Logout</a></li>
+			    	<li><a href="/logout">Logout</a></li>
 			   	@else
-			   		<li><a href="/auth/login">Login</a></li>
+			   		<li><a href="/login">Login</a></li>
 			   	@endif
 			</ul>
 		</div>
