@@ -7,6 +7,7 @@ use App\Formatter;
 use App\Tweets\Api;
 use App\Tweets\Tweet;
 use App\Tweets\TweetRepository;
+use App\User;
 use Illuminate\Console\Command;
 use Thujohn\Twitter\Facades\Twitter;
 
@@ -70,7 +71,11 @@ class Fetch extends Command
 		$sinceId  = $this->tweets->getLatestId();
 		$maxId    = 0;
 
-		$screename = 'rmlewisuk';
+		if (! $user = User::first()) {
+			$this->error('No user found, run one40:setup');
+		}
+
+		$screename = $user->username;
 
 		$page = 1;
 
@@ -104,6 +109,7 @@ class Fetch extends Command
 
 		if (! $tweetCount) {
 			$this->info('No new tweets found');
+			$this->log($tweetCount);
 			return;
 		}
 
@@ -118,6 +124,14 @@ class Fetch extends Command
 			$this->tweets->create($tweet);
 		}
 
+		$this->log($tweetCount);
+	}
+
+	/**
+	 * @param $tweetCount
+	 */
+	private function log($tweetCount)
+	{
 		FetchLog::create(['count' => $tweetCount]);
 	}
 }

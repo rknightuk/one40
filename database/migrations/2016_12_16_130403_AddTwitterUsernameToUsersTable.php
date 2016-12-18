@@ -15,7 +15,7 @@ class AddTwitterUsernameToUsersTable extends Migration
     {
 	    Schema::table('users', function(Blueprint $table)
 	    {
-		    $table->string('twitter')->after('name');
+		    $table->string('username')->after('name');
 	    });
     }
 
@@ -27,7 +27,7 @@ class AddTwitterUsernameToUsersTable extends Migration
     public function down()
     {
 	    Schema::table('users', function($table) {
-		    $table->dropColumn('twitter');
+		    $table->dropColumn('username');
 	    });
     }
 }
