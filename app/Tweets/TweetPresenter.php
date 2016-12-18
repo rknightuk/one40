@@ -7,18 +7,19 @@ class TweetPresenter extends Presenter {
 
 	public function tweet()
 	{
+
 		$this->text = Twitter_Autolink::create()->autolink($this->text);
 
 		if ($this->extra['entities'])
 		{
-			if (isset($this->extra['entities']->urls)) {
+			if (property_exists($this->extra['entities'], 'urls')) {
 				foreach($this->extra['entities']->urls as $url)
 				{
 					$this->text = str_replace($url->url, $url->expanded_url, $this->text);
 				}
 			}
 
-			if (isset($this->extra['entities']->media)) {
+			if (property_exists($this->extra['entities'], 'media')) {
 				foreach( $this->extra['entities']->media as $url)
 				{
 					$this->text = str_replace($url->url, $url->display_url, $this->text);

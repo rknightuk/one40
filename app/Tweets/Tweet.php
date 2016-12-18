@@ -45,7 +45,7 @@ class Tweet extends Model
 		// Fix serialization errors, see here: http://stackoverflow.com/questions/10152904/unserialize-function-unserialize-error-at-offset
 		$extra = preg_replace_callback ( '!s:(\d+):"(.*?)";!', function($match) {
 			return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
-		},$extra);
+		}, $extra);
 
 		return @unserialize($extra);
 	}
