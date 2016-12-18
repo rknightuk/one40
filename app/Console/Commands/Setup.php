@@ -61,7 +61,6 @@ class Setup extends Command
 	private function createUser()
 	{
 		$name = $this->ask('Name');
-		$twitter = $this->ask('Twitter username e.g. martymcfly');
 		$email = $this->ask('Email Address');
 
 		try
@@ -83,7 +82,6 @@ class Setup extends Command
 
 		return User::create([
 			'name' => $name,
-			'twitter' => $twitter,
 			'email' => $email,
 			'password' => $password
 		]);
