@@ -6,6 +6,10 @@ Auth::routes();
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+Route::group(['middleware' => ['auth']], function() {
+	Route::get('logs', 'LogController@index');
+});
+
 Route::group(['middleware' => ['private']], function() {
 	Route::get('/home', function() {
 		return redirect('/');

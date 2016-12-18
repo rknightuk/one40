@@ -105,3 +105,41 @@ footer {
 	text-align: right;
 	margin-bottom: 20px;
 }
+
+/* Activity feed from http://bootsnipp.com/snippets/Zlkg2 */
+
+.activity-feed {
+	padding: 15px;
+}
+.activity-feed .feed-item {
+	position: relative;
+	padding-bottom: 20px;
+	padding-left: 30px;
+	border-left: 2px solid #e4e8eb;
+}
+.activity-feed .feed-item:last-child {
+	border-color: transparent;
+}
+.activity-feed .feed-item:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -6px;
+	width: 10px;
+	height: 10px;
+	border-radius: 6px;
+	background: #fff;
+	border: 1px solid #f37167;
+}
+.activity-feed .feed-item .date {
+	position: relative;
+	top: -5px;
+	color: #8c96a3;
+	text-transform: uppercase;
+	font-size: 13px;
+}
+.activity-feed .feed-item .text {
+	position: relative;
+	top: -3px;
+}
