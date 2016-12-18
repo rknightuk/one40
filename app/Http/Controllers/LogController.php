@@ -8,7 +8,7 @@ class LogController extends Controller
 {
     public function index()
     {
-    	$logs = FetchLog::all();
+    	$logs = FetchLog::orderBy('created_at', 'desc')->paginate(30);
 
 	    return view('admin.logs', compact(
 		    'logs'

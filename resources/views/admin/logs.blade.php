@@ -23,6 +23,8 @@
 				@endforelse
 			</div>
 
+			{!! $logs->render() !!}
+
 		</div>
 
 		<div class="col-md-3"></div>
