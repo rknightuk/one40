@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Formatter;
+use App\Tweets\Api;
 use App\Tweets\Tweet;
 use App\Tweets\TweetRepository;
 use Illuminate\Console\Command;
@@ -31,6 +32,10 @@ class Fetch extends Command
 	 * @var TweetRepository
 	 */
 	private $tweets;
+	/**
+	 * @var Api
+	 */
+	private $api;
 
 	/**
 	 * Create a new command instance.
@@ -38,11 +43,12 @@ class Fetch extends Command
 	 * @param Formatter $formatter
 	 * @param TweetRepository $tweets
 	 */
-    public function __construct(Formatter $formatter, TweetRepository $tweets)
+    public function __construct(Formatter $formatter, TweetRepository $tweets, Api $api)
     {
         parent::__construct();
 	    $this->formatter = $formatter;
 	    $this->tweets = $tweets;
+	    $this->api = $api;
     }
 
     /**
@@ -68,23 +74,8 @@ class Fetch extends Command
 		$page = 1;
 
 		do {
-			$params = [
-				'screen_name'      => $screename,
-				'include_rts'      => true,
-				'include_entities' => true,
-				'count'            => 200
-			];
+			$data = $this->api->getUserTimeline($screename, $sinceID, $maxID);
 
-			if ($sinceID) {
-				$params['since_id'] = $sinceID;
-			}
-			if ($maxID) {
-				$params['max_id']   = $maxID;
-			}
-
-			$data = Twitter::getUserTimeline($params);
-
-			// Drop out on connection error
 			if (is_array($data) && isset($data[0]) && $data[0] === false) {
 				$this->error('ERROR!!');
 				$data = null;
@@ -109,32 +100,20 @@ class Fetch extends Command
 			$page++;
 		} while (! empty($data));
 
+		if (! count($tweets)) {
+			$this->info('No new tweets found');
+			return;
+		}
+
 		$this->info(count($tweets) . ' new tweets found');
 
-		if (count($tweets) > 0) {
-			// Ascending sort, oldest first
-			$tweets = array_reverse($tweets);
+		// Ascending sort, oldest first
+		$tweets = array_reverse($tweets);
 
-			foreach ($tweets as $tweet) {
-				$this->info('Importing tweet ' . $tweet['tweetid']);
-				$type = ($tweet['text'][0] == "@") ? 1 : (preg_match("/RT @\w+/", $tweet['text']) ? 2 : 0);
+		foreach ($tweets as $tweet) {
+			$this->info('Importing tweet ' . $tweet['tweetid']);
 
-				Tweet::firstOrCreate([
-					'userid' => $tweet['userid'],
-					'tweetid' => $tweet['tweetid'],
-					'type' => $type,
-					'time' => $tweet['time'],
-					'text' => $this->formatter->entityDecode($tweet['text']),
-					'source' => $tweet['source'],
-					'extra' => serialize($tweet['extra']),
-					'coordinates' => serialize($tweet['coordinates']),
-					'geo' => serialize($tweet['geo']),
-					'place' => serialize($tweet['place']),
-					'contributors' => serialize($tweet['contributors'])
-				]);
-			}
-		} else {
-			$this->info('No new tweets found');
+			$this->tweets->create($tweet);
 		}
 	}
 }

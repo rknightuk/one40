@@ -15,4 +15,9 @@ class TweetRepository {
 		return $latest ? $latest->tweetid : 0;
 	}
 
+	public function create($tweet)
+	{
+		return Tweet::firstOrCreate($tweet);
+	}
+
 }

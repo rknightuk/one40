@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Archive\LogRepository;
 use App\Formatter;
 use App\Tweets\Tweet;
+use App\Tweets\TweetRepository;
 use Illuminate\Console\Command;
 
 class Import extends Command
@@ -30,12 +31,17 @@ class Import extends Command
 	 * @var Formatter
 	 */
 	private $formatter;
+	/**
+	 * @var TweetRepository
+	 */
+	private $tweets;
 
-	public function __construct(LogRepository $logRepo, Formatter $formatter)
+	public function __construct(LogRepository $logRepo, Formatter $formatter, TweetRepository $tweets)
     {
         parent::__construct();
 	    $this->logRepo = $logRepo;
 	    $this->formatter = $formatter;
+	    $this->tweets = $tweets;
     }
 
     /**
@@ -88,21 +94,7 @@ class Import extends Command
 			    $tweets = array_reverse($tweets);
 
 			    foreach($tweets as $tweet) {
-				    $type = ($tweet['text'][0] == "@") ? 1 : (preg_match("/RT @\w+/", $tweet['text']) ? 2 : 0);
-
-					Tweet::firstOrCreate([
-						'userid' => $tweet['userid'],
-						'tweetid' => $tweet['tweetid'],
-						'type' => $type,
-						'time' => $tweet['time'],
-						'text' => $this->formatter->entityDecode($tweet['text']),
-						'source' => $tweet['source'],
-						'extra' => serialize($tweet['extra']),
-						'coordinates' => serialize($tweet['coordinates']),
-						'geo' => serialize($tweet['geo']),
-						'place' => serialize($tweet['place']),
-						'contributors' => serialize($tweet['contributors'])
-					]);
+				    $this->tweets->create($tweet);
 			    }
 		    }
 

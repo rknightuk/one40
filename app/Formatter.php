@@ -60,7 +60,22 @@ class Formatter {
 		if(!empty($tt) && is_array($tt) && $tt['text']) {
 			$t = $tt;
 		}
-		return $t;
+
+		$type = ($t['text'][0] == "@") ? 1 : (preg_match("/RT @\w+/", $t['text']) ? 2 : 0);
+
+		return [
+			'userid' => $t['userid'],
+			'tweetid' => $t['tweetid'],
+			'type' => $type,
+			'time' => $t['time'],
+			'text' => $this->entityDecode($t['text']),
+			'source' => $t['source'],
+			'extra' => serialize($t['extra']),
+			'coordinates' => serialize($t['coordinates']),
+			'geo' => serialize($t['geo']),
+			'place' => serialize($t['place']),
+			'contributors' => serialize($t['contributors'])
+		];
 	}
 
 	public function enhanceTweet($tweet) {
