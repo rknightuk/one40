@@ -11,6 +11,7 @@ class Api {
 	 * @param $sinceId
 	 * @param int $maxId
 	 * @return mixed
+	 * @throws \Exception
 	 *
 	 * statuses/user_timeline
 	 */
@@ -26,7 +27,13 @@ class Api {
 		if ($sinceId) $params['since_id'] = $sinceId;
 		if ($maxId) $params['max_id'] = $maxId;
 
-		return Twitter::getUserTimeline($params);
+		$data = Twitter::getUserTimeline($params);
+
+		if (is_array($data) && isset($data[0]) && $data[0] === false) {
+			throw new \Exception('Error fetching timeline');
+		}
+
+		return $data;
 	}
 
 }

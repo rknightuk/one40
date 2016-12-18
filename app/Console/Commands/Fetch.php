@@ -66,36 +66,35 @@ class Fetch extends Command
 	private function importTweets()
 	{
 		$tweets   = [];
-		$sinceID  = $this->tweets->getLatestId();
-		$maxID    = 0;
+		$sinceId  = $this->tweets->getLatestId();
+		$maxId    = 0;
 
 		$screename = 'rmlewisuk';
 
 		$page = 1;
 
 		do {
-			$data = $this->api->getUserTimeline($screename, $sinceID, $maxID);
-
-			if (is_array($data) && isset($data[0]) && $data[0] === false) {
-				$this->error('ERROR!!');
-				$data = null;
+			try {
+				$data = $this->api->getUserTimeline($screename, $sinceId, $maxId);
+			} catch (\Exception $e) {
+				$this->error($e->getMessage());
 				break;
 			}
 
-			if (! empty($data)) {
-				foreach ($data as $i => $tweet) {
+			if (empty($data)) continue;
 
-					if (is_array($tweet) && is_object($tweet[0]) && property_exists($tweet[0], 'message')) {
-						$this->error('Error: ' . $tweet[0]->message);
-					}
+			foreach ($data as $i => $tweet) {
 
-					$tweets[] = $this->formatter->transformTweet($tweet);
-
-					$maxID = $tweet->id_str;
-
-					// Subtracting 1 from max_id to prevent duplicate, but only if we support 64-bit integer handling
-					if ((int) "9223372036854775807" > 2147483647) $maxID = (int) $tweet->id - 1;
+				if (is_array($tweet) && is_object($tweet[0]) && property_exists($tweet[0], 'message')) {
+					$this->error('Error: ' . $tweet[0]->message);
 				}
+
+				$tweets[] = $this->formatter->transformTweet($tweet);
+
+				$maxId = $tweet->id_str;
+
+				// Subtracting 1 from max_id to prevent duplicate, but only if we support 64-bit integer handling
+				if ((int) "9223372036854775807" > 2147483647) $maxId = (int) $tweet->id - 1;
 			}
 			$page++;
 		} while (! empty($data));
