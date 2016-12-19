@@ -17,72 +17,68 @@ class Formatter {
 	);
 
 	public function transformTweet($tweet) {
-		$t = array(); $e = array();
-		foreach(get_object_vars($tweet) as $k => $v) {
-			if(array_key_exists($k, self::DB_MAP)) {
-				$key = self::DB_MAP[$k];
-				$val = $v;
-				if(in_array($key, array("text", "source", "tweetid", "id", "id_str"))) {
-					$val = (string) $v;
-				} elseif($key == "time") {
-					$val = strtotime($v);
-				}
-				$t[$key] = $val;
-			} elseif($k == "user") {
-				$t['userid'] = (string)$v->id_str;
-			} elseif($k == "retweeted_status") {
-				$rt = array(); $rte = array();
-				foreach(get_object_vars($v) as $kk => $vv) {
-					if(array_key_exists($kk, self::DB_MAP)) {
+		$formattedTweet = [];
+		$extra = [];
+
+		foreach(get_object_vars($tweet) as $key => $tweetValue) {
+			if (array_key_exists($key, self::DB_MAP)) {
+				$formattedTweet = $this->formatEntities($key, $tweetValue, $formattedTweet);
+			} elseif ($key == 'user') {
+				$formattedTweet['userid'] = (string) $tweetValue->id_str;
+			} elseif ($key == 'retweeted_status') {
+				$retweet = [];
+				$retweetExtra = [];
+				foreach(get_object_vars($tweetValue) as $kk => $vv) {
+					if (array_key_exists($kk, self::DB_MAP)) {
 						$kkey = self::DB_MAP[$kk];
 						$vval = $vv;
-						if(in_array($kkey, array("text", "source", "tweetid", "id", "id_str"))) {
-							$vval = (string)$vv;
-						} elseif($kkey == "time") {
+						if (in_array($kkey, ['text', 'source', 'tweetid', 'id', 'id_str'])) {
+							$vval = (string) $vv;
+						} elseif ($kkey == "time") {
 							$vval = strtotime($vv);
 						}
-						$rt[$kkey] = $vval;
-					} elseif($kk == "user") {
-						$rt['userid']     = (string)$vv->id_str;
-						$rt['screenname'] = (string)$vv->screen_name;
+						$retweet[$kkey] = $vval;
+					} elseif ($kk == "user") {
+						$retweet['userid']     = (string) $vv->id_str;
+						$retweet['screenname'] = (string) $vv->screen_name;
 					} else {
-						$rte[$kk] = $vv;
+						$retweetExtra[$kk] = $vv;
 					}
 				}
-				$rt['extra'] = $rte;
-				$e['rt']     = $rt;
+				$retweet['extra'] = $retweetExtra;
+				$extra['rt']     = $retweet;
 			} else {
-				$e[$k] = $v;
+				$extra[$key] = $tweetValue;
 			}
 		}
-		$t['extra'] = $e;
-		$tt = $this->enhanceTweet($t);
-		if(!empty($tt) && is_array($tt) && $tt['text']) {
-			$t = $tt;
+		$formattedTweet['extra'] = $extra;
+		$tt = $this->enhanceTweet($formattedTweet);
+		if (!empty($tt) && is_array($tt) && $tt['text']) {
+			$formattedTweet = $tt;
 		}
 
-		$type = ($t['text'][0] == "@") ? 1 : (preg_match("/RT @\w+/", $t['text']) ? 2 : 0);
+		$type = ($formattedTweet['text'][0] == "@") ? 1 : (preg_match("/RT @\w+/", $formattedTweet['text']) ? 2 : 0);
 
 		return [
-			'userid' => $t['userid'],
-			'tweetid' => $t['tweetid'],
+			'userid' => $formattedTweet['userid'],
+			'tweetid' => $formattedTweet['tweetid'],
 			'type' => $type,
-			'time' => $t['time'],
-			'text' => $this->entityDecode($t['text']),
-			'source' => $t['source'],
-			'extra' => serialize($t['extra']),
-			'coordinates' => serialize($t['coordinates']),
-			'geo' => serialize($t['geo']),
-			'place' => serialize($t['place']),
-			'contributors' => serialize($t['contributors'])
+			'time' => $formattedTweet['time'],
+			'text' => $this->entityDecode($formattedTweet['text']),
+			'source' => $formattedTweet['source'],
+			'extra' => serialize($formattedTweet['extra']),
+			'coordinates' => serialize($formattedTweet['coordinates']),
+			'geo' => serialize($formattedTweet['geo']),
+			'place' => serialize($formattedTweet['place']),
+			'contributors' => serialize($formattedTweet['contributors'])
 		];
 	}
 
 	public function enhanceTweet($tweet) {
 		// Finding entities
-		$tweetextra = array();
-		if(!empty($tweet['extra'])) {
-			if(is_array($tweet['extra'])) {
+		$tweetextra = [];
+		if (!empty($tweet['extra'])) {
+			if (is_array($tweet['extra'])) {
 				$tweetextra = $tweet['extra'];
 			} else {
 				@$tweetextra = unserialize($tweet['extra']);
@@ -91,39 +87,38 @@ class Formatter {
 		$rt = (array_key_exists("rt", $tweetextra) && !empty($tweetextra['rt']));
 		$entities = $rt ? $tweetextra['rt']['extra']['entities'] : $tweetextra['entities'];
 
-		// Let's go
-		$imgs    = array();
+		$imgs    = [];
 		$text    = $rt ? $tweetextra['rt']['text'] : $tweet['text'];
 		$mtext   = $this->mediaLinkTweetText($text, $entities);
 		$links   = $this->findURLs($mtext); // Two link lists because media links might be different from public URLs
 		$flinks  = $this->findURLs($text);
 
-		if(! empty($links) && ! empty($flinks)) { // connection between the two
+		if (! empty($links) && ! empty($flinks)) { // connection between the two
 			$linkmap = array_combine(array_keys($links), array_keys($flinks));
 		}
 
 		foreach($links as $link => $l) {
-			if(is_array($l) && array_key_exists("host", $l) && array_key_exists("path", $l)) {
+			if (is_array($l) && array_key_exists("host", $l) && array_key_exists("path", $l)) {
 				$domain = $this->domain($l['host']);
 				$imgid  = $this->imgid($l['path']);
-				if($imgid) {
-					if($domain == "twimg.com") {
+				if ($imgid) {
+					if ($domain == "twimg.com") {
 						$displaylink = $linkmap ? $linkmap[$link] : $link;
 						$imgs[$displaylink] = "//pbs.twimg.com" . $l['path'] . ":thumb";
 					}
-					if($domain == "twitpic.com") {
+					if ($domain == "twitpic.com") {
 						$imgs[$link] = "//twitpic.com/show/thumb/" . $imgid;
 					}
-					if($domain == "imgur.com") {
+					if ($domain == "imgur.com") {
 						$imgs[$link] = "//i.imgur.com/" . $imgid . "s.jpg";
 					}
-					if($domain == "moby.to") {
+					if ($domain == "moby.to") {
 						$imgs[$link] = "http://moby.to/" . $imgid . ":square";
 					}
-					if($domain == "instagr.am" || $domain == "instagram.com") {
+					if ($domain == "instagr.am" || $domain == "instagram.com") {
 						$html = (string) $this->getURL($link);
 						preg_match('/<meta property="og:image" content="([^"]+)"\s*\/>/i', $html, $matches);
-						if(isset($matches[1])) {
+						if (isset($matches[1])) {
 							$imgs[$link] = $matches[1];
 						}
 					}
@@ -131,18 +126,18 @@ class Formatter {
 			}
 		}
 
-		if(count($imgs) > 0) $tweet['extra']['imgs'] = $imgs;
+		if (count($imgs) > 0) $tweet['extra']['imgs'] = $imgs;
 
 		return $tweet;
 	}
 
 	// Replace t.co links with full links, for internal use
 	private function fullLinkTweetText($text, $entities, $mediaUrl = false) {
-		if(!$entities) { return $text; }
+		if (!$entities) { return $text; }
 		$sources = property_exists($entities, 'media') ? array_merge($entities->urls, $entities->media) : $entities->urls;
-		$replacements = array();
+		$replacements = [];
 		foreach($sources as $entity) {
-			if(property_exists($entity, 'expanded_url')) {
+			if (property_exists($entity, 'expanded_url')) {
 				$replacements[$entity->indices[0]] = array(
 					'end'     => $entity->indices[1],
 					'content' => $mediaUrl && property_exists($entity, 'media_url_https') ? $entity->media_url_https : $entity->expanded_url
@@ -167,7 +162,7 @@ class Formatter {
 	}
 
 	private function findURLs($str) {
-		$urls = array();
+		$urls = [];
 		preg_match_all("/\b(((https*:\/\/)|www\.).+?)(([!?,.\"\)]+)?(\s|$))/", $str, $m);
 		foreach($m[1] as $url) {
 			$u = ($url[0] == "w") ? "//" . $url : $url;
@@ -177,9 +172,9 @@ class Formatter {
 	}
 
 	private function domain($host) {
-		if(empty($host) || !is_string($host)) { return false; }
-		if(preg_match("/^[0-9\.]+$/", $host)) { return $host; } // IP
-		if(substr_count($host, ".") <= 1) {
+		if (empty($host) || !is_string($host)) { return false; }
+		if (preg_match("/^[0-9\.]+$/", $host)) { return $host; } // IP
+		if (substr_count($host, ".") <= 1) {
 			return $host;
 		} else {
 			$h = explode(".", $host, 2);
@@ -188,9 +183,9 @@ class Formatter {
 	}
 
 	private function imgid($path) {
-		$m = array();
+		$m = [];
 		preg_match("@/([a-z0-9]+).*@i", $path, $m);
-		if(count($m) > 0) {
+		if (count($m) > 0) {
 			return $m[1];
 		}
 		return false;
@@ -209,12 +204,12 @@ class Formatter {
 		);
 		$conn = curl_init($url);
 		$o    = $httpOptions;
-		if(is_array($auth) && count($auth) == 2) {
+		if (is_array($auth) && count($auth) == 2) {
 			$o[CURLOPT_USERPWD] = $auth[0] . ":" . $auth[1];
 		}
 		curl_setopt_array($conn, $o);
 		$file = curl_exec($conn);
-		if(!curl_errno($conn)) {
+		if (!curl_errno($conn)) {
 			curl_close($conn);
 			return $file;
 		} else {
@@ -226,6 +221,25 @@ class Formatter {
 
 	public function entityDecode($str){
 		return str_replace("&amp;", "&", str_replace("&lt;", "<", str_replace("&gt;", ">", $str)));
+	}
+
+	/**
+	 * @param $key
+	 * @param $tweetValue
+	 * @param $formattedTweet
+	 * @return array
+	 */
+	private function formatEntities($key, $tweetValue, $formattedTweet): array
+	{
+		$key = self::DB_MAP[$key];
+		$val = $tweetValue;
+		if (in_array($key, ['text', 'source', 'tweetid', 'id', 'id_str'])) {
+			$val = (string)$tweetValue;
+		} elseif ($key == 'time') {
+			$val = strtotime($tweetValue);
+		}
+		$formattedTweet[$key] = $val;
+		return $formattedTweet;
 	}
 
 }
