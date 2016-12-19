@@ -43,6 +43,12 @@ class TweetPresenter extends Presenter {
 		if ($this->place)
 			$metadata = $metadata . ' from <a href="http://maps.google.com/?q='.urlencode($this->place->full_name)	.'">' . $this->place->full_name . '</a>';
 
+		if ($replyData = $this->reply)
+		{
+			$metadata = $metadata . ' in <a href="https://twitter.com/statuses/' . $replyData['id'] . '">reply to @' . $replyData['username'] . '</a>';
+
+		}
+
 		return $metadata;
 	}
 }

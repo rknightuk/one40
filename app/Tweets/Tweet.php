@@ -54,4 +54,14 @@ class Tweet extends Model
 	{
 		return unserialize(str_replace("O:16:\"SimpleXMLElement\"", "O:8:\"stdClass\"", $place));
 	}
+
+	public function getReplyAttribute()
+	{
+		if ($this->type != TweetType::TYPE_REPLY) return false;
+
+		return [
+			'id' => $this->extra['in_reply_to_status_id_str'],
+			'username' => $this->extra['in_reply_to_screen_name'],
+		];
+	}
 }
