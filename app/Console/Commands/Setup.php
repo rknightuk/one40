@@ -54,7 +54,7 @@ class Setup extends Command
 	private function setupDatabase()
 	{
 		Artisan::call('migrate:install');
-		Artisan::call('migrate');
+		Artisan::call('migrate', ['--force' => true]);
 	}
 
 	private function createUser()
