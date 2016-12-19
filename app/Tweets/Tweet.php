@@ -59,6 +59,8 @@ class Tweet extends Model
 	{
 		if ($this->type != TweetType::TYPE_REPLY) return false;
 
+		if (! isset($this->extra['in_reply_to_status_id_str'])) return false;
+
 		return [
 			'id' => $this->extra['in_reply_to_status_id_str'],
 			'username' => $this->extra['in_reply_to_screen_name'],
