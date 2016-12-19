@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\FetchLog;
+use App\Fetcher\FetchLog;
 
 class LogController extends Controller
 {

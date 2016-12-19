@@ -67,9 +67,21 @@ class TweetRepository {
 	 * @param $tweet
 	 * @return Tweet
 	 */
-	public function create($tweet)
+	public function addTweet($tweet)
 	{
 		return Tweet::firstOrCreate($tweet);
+	}
+
+	/**
+	 * Add tweets to DB
+	 *
+	 * @param array $tweets
+	 */
+	public function addTweets(array $tweets)
+	{
+		foreach ($tweets as $tweet) {
+			$this->addTweet($tweet);
+		}
 	}
 
 	/**

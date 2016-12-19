@@ -2,14 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\FetchLog;
-use App\Formatter;
+use App\Fetcher\FetchLog;
+use App\Tweets\Formatter;
 use App\Tweets\Api;
-use App\Tweets\Tweet;
 use App\Tweets\TweetRepository;
 use App\User;
 use Illuminate\Console\Command;
-use Thujohn\Twitter\Facades\Twitter;
 
 class Fetch extends Command
 {
@@ -119,11 +117,7 @@ class Fetch extends Command
 		// Ascending sort, oldest first
 		$tweets = array_reverse($tweets);
 
-		foreach ($tweets as $tweet) {
-			$this->info('Importing tweet ' . $tweet['tweetid']);
-
-			$this->tweets->create($tweet);
-		}
+		$this->tweets->addTweets($tweets);
 
 		$this->log($tweetCount);
 	}

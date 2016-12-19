@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Archive\LogRepository;
-use App\Formatter;
+use App\Tweets\Formatter;
 use App\Tweets\TweetRepository;
 use Illuminate\Console\Command;
 
@@ -92,9 +92,7 @@ class Import extends Command
 			    // Ascending sort, oldest first
 			    $tweets = array_reverse($tweets);
 
-			    foreach($tweets as $tweet) {
-				    $this->tweets->create($tweet);
-			    }
+			    $this->tweets->addTweets($tweets);
 		    }
 
 		    $tweets = [];
