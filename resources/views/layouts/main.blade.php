@@ -31,6 +31,7 @@
 
 		<script src="/assets/js/jquery.min.js"></script>
 		<script src="/assets/js/bootstrap.min.js"></script>
+		<script src="https://use.fontawesome.com/7fba236428.js"></script>
 		<script src="/assets/js/archivey.js"></script>
 		
 
