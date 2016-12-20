@@ -23,6 +23,7 @@
 			@endif
 			<ul class="nav navbar-nav navbar-right">
 			    @if (Auth::check())
+					<li><a href="/stats">Stats</a></li>
 					<li><a href="/logs">Fetch Logs</a></li>
 			    	<li><a href="/logout">Logout</a></li>
 			   	@else

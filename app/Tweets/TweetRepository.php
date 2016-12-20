@@ -98,6 +98,51 @@ class TweetRepository {
 			->paginate(self::$paginate);
 	}
 
+	public function stats()
+	{
+		$clients = $this->topClients();
+
+		$totals = $this->typeCounts()->mapWithKeys(function($type) {
+			return [TweetType::getTypeString($type['type']) => $type['count']];
+		});
+
+		$totals['all'] = $totals->sum();
+
+		$average  = $this->average();
+
+		return [$totals, $clients, $average];
+
+	}
+
+	public function topClients()
+	{
+		return Tweet::select(DB::raw('count(*) as count, source'))
+			->groupBy('source')
+			->orderBy('count', 'desc')
+			->limit(10)
+			->get();
+	}
+
+	public function typeCounts()
+	{
+		return Tweet::select(DB::raw('count(*) as count, type'))
+			->groupBy('type')
+			->get();
+	}
+
+	public function average()
+	{
+		$firstTweet = Tweet::first();
+
+		$daysSince = $firstTweet->time->diffInDays(Carbon::now());
+
+		return [
+			'average' => number_format(Tweet::count() / $daysSince, 2),
+			'daysSince' => $daysSince,
+			'first' => $firstTweet->time
+		];
+	}
+
 	/**
 	 * Get tweets for specific date range
 	 *
