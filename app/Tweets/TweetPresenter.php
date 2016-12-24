@@ -37,7 +37,7 @@ class TweetPresenter extends Presenter {
 
 	public function metadata()
 	{
-		$url = "https://twitter.com/statuses/".$this->tweetid;
+		$url = "https://twitter.com/" . env('TWITTER_USERNAME') . "/status/" .$this->tweetid;
 		$metadata = '<a href="'.$url.'">'.$this->time.'</a>';
 
 		if ($this->place)
@@ -45,7 +45,7 @@ class TweetPresenter extends Presenter {
 
 		if ($replyData = $this->reply)
 		{
-			$metadata = $metadata . ' in <a href="https://twitter.com/statuses/' . $replyData['id'] . '">reply to @' . $replyData['username'] . '</a>';
+			$metadata = $metadata . ' in <a href="https://twitter.com/' . $replyData['username'] . '/status/' . $replyData['id'] . '">reply to @' . $replyData['username'] . '</a>';
 
 		}
 
