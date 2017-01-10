@@ -4,7 +4,7 @@
 
 		<div class="media tweet-list__tweet-body">
 			<div class="media-body">
-				<p>{!! html_entity_decode($tweet->present()->tweet) !!}</p>
+				<p>{!! nl2br(html_entity_decode($tweet->present()->tweet)) !!}</p>
 				<p class="tweet-list__meta">
 					{!! $tweet->present()->metadata !!}
 					<br>
