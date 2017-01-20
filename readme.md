@@ -18,6 +18,12 @@ To import your archive, move all the `(data/js/tweets/year_month.js)` files to `
 
 You can fetch new tweets by running `php artisan one40:fetch`. This will import your most recent tweets (up to 3200) so it's best to import a recent archive first. It's recommended you setup a cron job to fetch new tweets on a schedule (although you can do it manually if you want). To fetch new tweets at midday every day, add this to your crontab:
 
-1 12 * * * php /path/to/your/project/artisan one40:fetch
+`1 12 * * * php /path/to/your/project/artisan one40:fetch`
 
 [This article](https://www.digitalocean.com/community/tutorials/how-to-use-cron-to-automate-tasks-on-a-vps) explains how to setup cron jobs.
+
+## Licence
+
+Signifcant portions of the tweet importing logic is from [Tweetnest](https://github.com/graulund/tweetnest/blob/master/LICENSE.txt) licenced under MIT.
+
+[http://rmlewisuk.mit-license.org/](http://rmlewisuk.mit-license.org/)
