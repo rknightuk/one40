@@ -56,6 +56,35 @@ class TweetController {
 		));
 	}
 
+	public function searchResults($search, $year = null, $month = null, $date = null)
+	{
+		$monthCounts = null;
+		$dayCounts = null;
+		$query = new TweetQuery();
+		$query->search($search);
+
+		if ($year) $query->forYear($year);
+		if ($month) $query->forMonth($month);
+		if ($date) $query->forDate($date);
+
+		list($ids, $tweets) = $this->tweets->all($query);
+
+		if (! $month) $monthCounts = $this->tweets->monthCount($ids);
+		if ($month && ! $date) $dayCounts = $this->tweets->dayCount($ids);
+
+		$this->breadcrumbs->addCrumb(count($ids) . ' found containing "' . $search . '"', "search/$search");
+		if ($year) $this->breadcrumbs->addCrumb($year, $year);
+		if ($month) $this->breadcrumbs->addCrumb(displayMonth($month), $month);
+		if ($date) $this->breadcrumbs->addCrumb(displayDate($date), $date);
+
+		return view('tweets.index', compact(
+			'tweets',
+			'search',
+			'monthCounts',
+			'dayCounts'
+		));
+	}
+
 	public function show($tweetId)
 	{
 		$this->breadcrumbs->addCrumb('Tweet ID: ' . $tweetId, $tweetId);
@@ -81,18 +110,6 @@ class TweetController {
 		$search = Input::get('search');
 
 		return redirect('search/'.$search);
-	}
-
-	public function searchResults($search)
-	{
-		$tweets = $this->tweets->search($search);
-
-		$this->breadcrumbs->addCrumb($tweets->total() . ' found containing "' . $search . '"', 'search');
-
-		return view('tweets.index', compact(
-			'tweets',
-			'search'
-		));
 	}
 
 }

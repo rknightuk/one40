@@ -9,6 +9,10 @@ class TweetRepository {
 
 	protected static $paginate = 50;
 
+	/**
+	 * @param TweetQuery|null $query
+	 * @return array
+	 */
 	public function all(TweetQuery $query = null)
 	{
 		if (!$query) $query = new TweetQuery();
@@ -107,19 +111,6 @@ class TweetRepository {
 		foreach ($tweets as $tweet) {
 			$this->addTweet($tweet);
 		}
-	}
-
-	/**
-	 * Search tweets
-	 *
-	 * @param  String $search
-	 * @return array
-	 */
-	public function search($search)
-	{
-		return Tweet::where('text', 'LIKE', '%'.$search.'%')
-			->orderBy('time', 'desc')
-			->paginate(self::$paginate);
 	}
 
 	public function stats()
