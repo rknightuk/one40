@@ -9,6 +9,39 @@ class TweetRepository {
 
 	protected static $paginate = 50;
 
+	public function all(TweetQuery $query)
+	{
+		$db = Tweet::latest('time');
+
+		$date = Carbon::createFromDate($query->year, $query->month, $query->date);
+		$start = null;
+		$end = null;
+
+		if ($query->date) {
+			$start = $date->copy()->startOfDay();
+			$end = $date->copy()->endOfDay();
+		}
+		elseif ($query->month) {
+			$start = $date->copy()->startOfMonth();
+			$end = $date->copy()->endOfMonth();
+		}
+		elseif ($query->year) {
+			$start = $date->copy()->startOfYear();
+			$end = $date->copy()->endOfYear();
+		}
+
+		if ($start && $end) {
+			$db->where('time', '>=', $start->getTimestamp())
+				->where('time', '<=', $end->getTimestamp());
+		}
+
+		if ($query->search) {
+			$db->where('text', 'LIKE', "%$query->search%");
+		}
+
+		return [$db->pluck('id')->toArray(), $db->paginate(self::$paginate)];
+	}
+
 	/**
 	 * Get all tweets
 	 *
