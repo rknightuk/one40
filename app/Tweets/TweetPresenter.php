@@ -26,6 +26,8 @@ class TweetPresenter extends Presenter {
 				}
 			}
 		}
+		
+		$this->text = str_replace('pic.twitter.com', 'https://pic.twitter.com', $this->text);
 
 		if ($this->type == '1')
 			$this->text = '<i class="fa fa-reply"></i> ' . $this->text;
