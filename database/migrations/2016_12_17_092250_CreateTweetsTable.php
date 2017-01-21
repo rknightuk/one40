@@ -20,7 +20,7 @@ class CreateTweetsTable extends Migration
             $table->string('tweetid', 100)->unique('tweetid');
             $table->boolean('type')->default(0);
             $table->integer('time')->unsigned();
-            $table->string('text')->index('text');
+            $table->text('text');
             $table->string('source');
             $table->boolean('favorite')->default(0);
             $table->text('extra');

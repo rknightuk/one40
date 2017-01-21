@@ -12,22 +12,13 @@ class TweetPresenter extends Presenter {
 
 		if ($this->extra['entities'])
 		{
-			if (property_exists($this->extra['entities'], 'urls')) {
-				foreach($this->extra['entities']->urls as $url)
-				{
-					$this->text = str_replace($url->url, $url->expanded_url, $this->text);
-				}
-			}
-
 			if (property_exists($this->extra['entities'], 'media')) {
-				foreach( $this->extra['entities']->media as $url)
+				foreach($this->extra['entities']->media as $url)
 				{
-					$this->text = str_replace($url->url, $url->display_url, $this->text);
+					$this->text = str_replace($url->url, '', $this->text);
 				}
 			}
 		}
-		
-		$this->text = str_replace('pic.twitter.com', 'https://pic.twitter.com', $this->text);
 
 		if ($this->type == '1')
 			$this->text = '<i class="fa fa-reply"></i> ' . $this->text;

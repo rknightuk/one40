@@ -59,6 +59,15 @@ class Formatter {
 
 		$type = ($formattedTweet['text'][0] == "@") ? 1 : (preg_match("/RT @\w+/", $formattedTweet['text']) ? 2 : 0);
 
+		$entities = $formattedTweet['extra']['entities'];
+
+		if (is_array($entities->urls))
+		{
+			foreach ($entities->urls as $url) {
+				$formattedTweet['text'] = str_replace($url->url, $url->expanded_url, $formattedTweet['text']);
+			}
+		}
+
 		return [
 			'userid' => $formattedTweet['userid'],
 			'tweetid' => $formattedTweet['tweetid'],
