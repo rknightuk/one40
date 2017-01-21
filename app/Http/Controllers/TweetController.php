@@ -31,9 +31,18 @@ class TweetController {
 		$monthCounts = null;
 		$dayCounts = null;
 
-		if ($date) $query->forDate($date);
-		if ($month) $query->forMonth($month);
-		if ($year) $query->forYear($year);
+		if ($year) {
+			$query->forYear($year);
+			$this->breadcrumbs->addCrumb($year, $year);
+		}
+		if ($month) {
+			$query->forMonth($month);
+			$this->breadcrumbs->addCrumb(displayMonth($month), $month);
+		}
+		if ($date) {
+			$query->forDate($date);
+			$this->breadcrumbs->addCrumb(displayDate($date), $date);
+		}
 
 		list($ids, $tweets) = $this->tweets->all($query);
 
