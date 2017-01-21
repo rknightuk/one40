@@ -9,8 +9,10 @@ class TweetRepository {
 
 	protected static $paginate = 50;
 
-	public function all(TweetQuery $query)
+	public function all(TweetQuery $query = null)
 	{
+		if (!$query) $query = new TweetQuery();
+
 		$db = Tweet::latest('time');
 
 		$date = Carbon::createFromDate($query->year, $query->month, $query->date);
@@ -40,16 +42,6 @@ class TweetRepository {
 		}
 
 		return [$db->pluck('id')->toArray(), $db->paginate(self::$paginate)];
-	}
-
-	/**
-	 * Get all tweets
-	 *
-	 * @return array Tweets
-	 */
-	public function getAll()
-	{
-		return Tweet::orderBy('time', 'desc')->paginate(self::$paginate);
 	}
 
 	/**
@@ -209,33 +201,22 @@ class TweetRepository {
 			->paginate(self::$paginate);
 	}
 
-	public function monthCount()
+	public function monthCount($ids = null)
 	{
 		$counts = DB::select(DB::raw('select Year(FROM_UNIXTIME(time)) as year, Month(FROM_UNIXTIME(time)) as month, Count(*) as count
 			FROM tweets
+			' . ($ids ? 'where id in (' . implode(',', $ids) . ')' : '') . '
 			GROUP BY Year(FROM_UNIXTIME(time)), Month(FROM_UNIXTIME(time))
 			ORDER BY Year(FROM_UNIXTIME(time)) desc, Month(FROM_UNIXTIME(time)) desc'));
 
 		return $this->calculatePercentagesAndTotal($counts);
 	}
 
-	public function monthCountForYear($year)
-	{
-		$counts = DB::select(DB::raw('select Year(FROM_UNIXTIME(time)) as year, Month(FROM_UNIXTIME(time)) as month, Count(*) as count
-			FROM tweets
-			where year(FROM_UNIXTIME(time)) = '.$year.'
-			GROUP BY Year(FROM_UNIXTIME(time)), Month(FROM_UNIXTIME(time))
-			ORDER BY Year(FROM_UNIXTIME(time)) desc, Month(FROM_UNIXTIME(time)) desc'));
-
-		return $this->calculatePercentagesAndTotal($counts);
-	}
-
-	public function dayCountForMonth($year, $month)
+	public function dayCount($ids = null)
 	{
 		$counts = DB::select(DB::raw('select Year(FROM_UNIXTIME(time)) as year, Month(FROM_UNIXTIME(time)) as month, Day(FROM_UNIXTIME(time)) as day, Count(*) as count
 			FROM tweets
-			where year(FROM_UNIXTIME(time)) = '.$year.'
-			and month(FROM_UNIXTIME(time)) = '.$month.'
+			' . ($ids ? 'where id in (' . implode(',', $ids) . ')' : '') . '
 			GROUP BY Year(FROM_UNIXTIME(time)), Month(FROM_UNIXTIME(time)), Day(FROM_UNIXTIME(time))'));
 
 		return $this->calculatePercentagesAndTotal($counts);

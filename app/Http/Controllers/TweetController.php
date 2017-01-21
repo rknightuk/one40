@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Breadcrumbs\BreadcrumbInterface;
+use App\Tweets\TweetQuery;
 use App\Tweets\TweetRepository;
 use Illuminate\Support\Facades\Input;
 
@@ -24,15 +25,25 @@ class TweetController {
 		$this->breadcrumbs->addCrumb('All Tweets', '/');
 	}
 
-	public function index()
+	public function index($year = null, $month = null, $date = null)
 	{
-		$tweets = $this->tweets->getAll();
+		$query = new TweetQuery();
+		$monthCounts = null;
+		$dayCounts = null;
 
-		$monthCounts = $this->tweets->monthCount();
+		if ($date) $query->forDate($date);
+		if ($month) $query->forMonth($month);
+		if ($year) $query->forYear($year);
+
+		list($ids, $tweets) = $this->tweets->all($query);
+
+		if (! $month) $monthCounts = $this->tweets->monthCount($ids);
+		if ($month && ! $date) $dayCounts = $this->tweets->dayCount($ids);
 
 		return view('tweets.index', compact(
 			'tweets',
-			'monthCounts'
+			'monthCounts',
+			'dayCounts'
 		));
 	}
 
@@ -54,33 +65,6 @@ class TweetController {
 		$tweet = $this->tweets->getRandomTweet();
 
 		return $this->show($tweet->tweetid);
-	}
-
-	public function date($year, $month = null, $day = null)
-	{
-		$monthCounts = null;
-		$dayCounts = null;
-
-		$this->breadcrumbs->addCrumb($year, $year);
-		if ($month) $this->breadcrumbs->addCrumb(displayMonth($month), $month);
-		if ($day) $this->breadcrumbs->addCrumb(displayDate($day), $day);
-
-		$tweets = $this->tweets->getForDate($year, $month, $day);
-
-		if ( ! $month)
-		{
-			$monthCounts = $this->tweets->monthCountForYear($year);
-		}
-		elseif ( ! $day)
-		{
-			$dayCounts = $this->tweets->dayCountForMonth($year, $month);
-		}
-
-		return view('tweets.index', compact(
-			'tweets',
-			'monthCounts',
-			'dayCounts'
-		));
 	}
 
 	public function search()

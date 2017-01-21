@@ -25,10 +25,10 @@ Route::group(['middleware' => ['private']], function() {
 	Route::get('/tweet', function() { return redirect('/random'); });
 	Route::get('/random', 'TweetController@random');
 
-	Route::get('{year}/{month?}/{day?}', 'TweetController@date')->where([
+	Route::get('{year}/{month?}/{date?}', 'TweetController@index')->where([
 		'year' => '[0-9]+',
 		'month' => '[0-9]+',
-		'day' => '[0-9]+'
+		'date' => '[0-9]+'
 	]);
 
 	Route::get('/search', function() { return redirect('/'); });
