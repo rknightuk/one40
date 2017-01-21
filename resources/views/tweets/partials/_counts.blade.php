@@ -13,14 +13,14 @@
 
 			<ul class="list-group">
 
-			<a href="/{!!$month->year!!}" class="list-group-item year-heading">
+			<a href="@if (isset($search))/search/{{$search}}@endif/{!!$month->year!!}" class="list-group-item year-heading">
 				<span class="badge">{!!$monthCounts['year_counts'][$month->year]!!}</span>
 				{!! $month->year !!}
 			</a>
 
 		@endif
 
-		<a href="/{!!$month->year!!}/{!!$month->month!!}" class="list-group-item month-item">
+		<a href="@if (isset($search))/search/{{$search}}@endif/{!!$month->year!!}/{!!$month->month!!}" class="list-group-item month-item">
 			<span class="badge">{!!$month->count!!}</span>
 			{!! displayMonth($month->month) !!} {!! $month->year !!}
 			<div class="tweet-percentage" style="width:{!!$month->percentage!!}%;"></div>
@@ -35,7 +35,7 @@
 	<ul class="list-group">
 
 		@foreach ($dayCounts['tweet_count'] as $day)
-			<a href="{!!$day->month!!}/{!!$day->day!!}" class="list-group-item month-item">
+			<a href="@if (isset($search))/search/{{$search}}@endif/{!! $day->year !!}/{!!$day->month!!}/{!!$day->day!!}" class="list-group-item month-item">
 				<span class="badge">{!!$day->count!!}</span>
 				{!! displayMonth($day->month) !!} {!! displayDate($day->day) !!} {!! $day->year !!}
 				<div class="tweet-percentage" style="width:{!!$day->percentage!!}%;"></div>

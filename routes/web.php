@@ -34,7 +34,7 @@ Route::group(['middleware' => ['private']], function() {
 	Route::get('/search', function() { return redirect('/'); });
 	Route::post('/search', 'TweetController@search');
 
-	Route::get('/search/{search?}', [
+	Route::get('/search/{search?}/{year?}/{month?}/{day?}', [
 		'as' => 'search',
 		'uses' => 'TweetController@searchResults'
 	]);
