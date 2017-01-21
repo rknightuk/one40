@@ -93,7 +93,6 @@ class TweetRepository {
 	public function search($search)
 	{
 		return Tweet::where('text', 'LIKE', '%'.$search.'%')
-			->orWhere('extra', 'LIKE', '%'.$search.'%')
 			->orderBy('time', 'desc')
 			->paginate(self::$paginate);
 	}
