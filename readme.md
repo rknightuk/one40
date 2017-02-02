@@ -1,8 +1,23 @@
 # One40 — Self Hosted Twitter Archive
 
+A personal, searchable Twitter archive built with Laravel.
+
+[Live Demo](http://tweets.rbbl.ws)
+
+## Requirements
+
+- See the [Laravel requirements](https://laravel.com/docs/5.4#server-requirements)
+- A twitter account
+
 ## Inital Setup
 
-Clone this repository `git clone https://github.com/rmlewisuk/one40.git one40` and navigate to the root `cd one40`. Run `composer install` and then create a copy of the example env file `cp .env.example .env`. Open `.env`, fill in your database details. Then go to [https://apps.twitter.com](https://apps.twitter.com) and create a new application to get your app keys, and fill put them in the env file. Finally, set `PRIVATE` to true if you don't want your Twitter archive to be publicly accessible (we'll create a user account in the next step). Finally, run `php artisan key:generate`.
+- Clone this repository `git clone https://github.com/rmlewisuk/one40.git one40`
+- Navigate to the root `cd one40`. 
+- Run `composer install`
+- Create a copy of the example env file `cp .env.example .env`. 
+- Open `.env`, fill in your database details. 
+- Go to [https://apps.twitter.com](https://apps.twitter.com) and create a new application to get your app keys, and put them in the env file. Note: set `PRIVATE` to true if you don't want your Twitter archive to be publicly accessible (we'll create a user account in the next step). 
+- Finally, run `php artisan key:generate`.
 
 ## User account
 
@@ -12,7 +27,7 @@ Run `php artisan one40:setup`; this will setup the database and prompt for a use
 
 NB: You can request your [Twitter archive here](https://support.twitter.com/articles/20170160)
 
-To import your archive, move all the `(data/js/tweets/year_month.js)` files to `resources/archive` and run `php artisan one40:import`. This can take a while depending on the size of your archive, so if it times out, just rerun it — one40 keeps track of which files it has imported, so it won't re-run the same archive file twice.
+To import your archive, move all the `(data/js/tweets/year_month.js)` files to `resources/archive` (create the `archive` directory if it doesn't exist) and run `php artisan one40:import`. This can take a while depending on the size of your archive, so if it times out, just rerun it — one40 keeps track of which files it has imported, so it won't re-run the same archive file twice.
 
 ## Fetching new tweets
 
