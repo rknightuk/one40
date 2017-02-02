@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "laravel/framework": "5.3.*",
+        "laravel/framework": "5.4.*",
         "thujohn/twitter": "^2.2",
         "nojimage/twitter-text-php": "^1.1",
         "creitive/laravel5-breadcrumbs": "^2.0",
