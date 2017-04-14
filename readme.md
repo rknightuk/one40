@@ -39,6 +39,14 @@ You can fetch new tweets by running `php artisan one40:fetch`. This will import 
 
 [This article](https://www.digitalocean.com/community/tutorials/how-to-use-cron-to-automate-tasks-on-a-vps) explains how to setup cron jobs.
 
+## Contributing
+
+The primary purpose of this is for me to be able to quickly search my tweets. I am aware there are some weird bugs with imported tweets being truncated and displaying in strange ways ([see all issues](https://github.com/rmlewisuk/one40/issues)) — I don't have the time to fix them but I will happily accept pull requests that fix these issues.
+
+I'm also aware of how messy a lot of the code is — a lot of the importing code is copy/pasted from [Tweetnest](https://github.com/graulund/tweetnest). Again, I'll happily accept PRs that improve this.
+
+If you have an idea for a new feature, open an issue describing the feature so we can discuss if it before you put significant work into it.
+
 ## Licence
 
 Signifcant portions of the tweet importing logic is from [Tweetnest](https://github.com/graulund/tweetnest/blob/master/LICENSE.txt) licenced under MIT.
