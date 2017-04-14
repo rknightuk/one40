@@ -4,6 +4,8 @@ A personal, searchable Twitter archive built with Laravel.
 
 [Live Demo](http://tweets.rbbl.ws)
 
+![](screenshot.jpg)
+
 ## Requirements
 
 - See the [Laravel requirements](https://laravel.com/docs/5.4#server-requirements)
