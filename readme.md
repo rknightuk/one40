@@ -47,8 +47,8 @@ I'm also aware of how messy a lot of the code is — a lot of the importing code
 
 If you have an idea for a new feature, open an issue describing the feature so we can discuss if it before you put significant work into it.
 
-## Licence
+## License
 
-Signifcant portions of the tweet importing logic is from [Tweetnest](https://github.com/graulund/tweetnest/blob/master/LICENSE.txt) licenced under MIT.
+Signifcant portions of the tweet importing logic is from [Tweetnest](https://github.com/graulund/tweetnest/blob/master/LICENSE.txt) licensed under MIT.
 
 [http://rmlewisuk.mit-license.org/](http://rmlewisuk.mit-license.org/)
