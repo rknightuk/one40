@@ -16,7 +16,7 @@
 			  	@foreach ($tweet->photos() as $photo)
 
 					<a class="pull-left" href="{!! $photo['url'] !!}">
-						<img class="media-object" src="{!!$photo['thumb'] !!}" width="75" height="75">
+						<img class="media-object" src="{!! str_replace('http://', 'https://', $photo['thumb']) !!}" width="75" height="75">
 					</a>
 
 				@endforeach
