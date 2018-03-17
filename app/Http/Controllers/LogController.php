@@ -14,4 +14,15 @@ class LogController extends Controller
 		    'logs'
 	    ));
     }
+
+	public function purge()
+	{
+		$logs = FetchLog::all();
+
+		$ids = $logs->pluck('id');
+
+		FetchLog::destroy($ids->toArray());
+
+		return redirect('logs');
+	}
 }

@@ -8,6 +8,12 @@
 
 			<h1>Tweet Fetch Log</h1>
 
+			<form method="post" action="/logs/purge">
+				{{ csrf_field() }}
+
+				<input type="submit" value="Purge Logs">
+			</form>
+
 			<div class="activity-feed">
 				@forelse ($logs as $log)
 					<div class="feed-item">

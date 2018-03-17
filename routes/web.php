@@ -8,6 +8,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::group(['middleware' => ['auth']], function() {
 	Route::get('logs', 'LogController@index');
+	Route::post('logs/purge', 'LogController@purge');
 	Route::get('stats', 'AdminController@stats');
 });
 
