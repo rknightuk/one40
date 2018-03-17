@@ -9,7 +9,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 
 		<link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,600' rel='stylesheet' type='text/css'>
-		<link rel="shortcut icon" href="img/favicon.ico">
+		<link rel="shortcut icon" href="favicon.ico">
 		<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/assets/css/style.css">
 		
