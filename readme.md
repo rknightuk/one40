@@ -19,11 +19,12 @@ A personal, searchable Twitter archive built with Laravel.
 - Create a copy of the example env file `cp .env.example .env`. 
 - Open `.env`, fill in your database details. 
 - Go to [https://apps.twitter.com](https://apps.twitter.com) and create a new application to get your app keys, and put them in the env file. Note: set `PRIVATE` to true if you don't want your Twitter archive to be publicly accessible (we'll create a user account in the next step). 
-- Finally, run `php artisan key:generate`.
+- Run `php artisan key:generate`
+- Run `php artisan migrate` to create the database tables
 
 ## User account
 
-Run `php artisan one40:setup`; this will setup the database and prompt for a username and password. This user account is used to login to one40 to see fetch logs and limit access to your archive (if the app is set to private).
+Run `php artisan one40:setup`; this will prompt for an email and password. This user account is used to login to one40 to see fetch logs and limit access to your archive (if the app is set to private).
 
 ## Importing your archive
 
