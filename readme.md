@@ -2,6 +2,4 @@
 
 A personal, searchable Twitter archive built with Laravel.
 
-[Live Demo](http://tweets.rbbl.ws)
-
-[Documentation](https://code.robblewis.me/one40)
+Archived repo. Try [Tweetback](https://github.com/tweetback) or [https://tinysubversions.com/twitter-archive/make-your-own/](https://tinysubversions.com/twitter-archive/make-your-own/)
